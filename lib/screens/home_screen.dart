@@ -235,16 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            // Floating background icon
-            Positioned(
-              right: -15,
-              bottom: -15,
-              child: Icon(
-                LucideIcons.mail,
-                size: 140,
-                color: Colors.white.withAlpha(isDark ? 6 : 14),
-              ),
-            ),
+
             // Dashboard Stats Details
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
