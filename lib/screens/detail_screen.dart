@@ -7,6 +7,7 @@ import '../models/staff.dart';
 import '../models/equipment.dart';
 import '../theme/app_theme.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'manage_entity_screen.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -44,6 +45,52 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       ),
     );
+  }
+
+  Future<void> _launchCall(String phone) async {
+    final String cleanPhone = phone.replaceAll(RegExp(r'\s+|-'), '');
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: cleanPhone,
+    );
+    try {
+      if (await canLaunchUrl(launchUri)) {
+        await launchUrl(launchUri, mode: LaunchMode.externalApplication);
+      } else {
+        _showActionSnackbar('Could not launch dialer for $phone');
+      }
+    } catch (e) {
+      _showActionSnackbar('Error launching call: $e');
+    }
+  }
+
+  Future<void> _launchEmail(String email) async {
+    final Uri launchUri = Uri(
+      scheme: 'mailto',
+      path: email.trim(),
+    );
+    try {
+      if (await canLaunchUrl(launchUri)) {
+        await launchUrl(launchUri, mode: LaunchMode.externalApplication);
+      } else {
+        _showActionSnackbar('Could not launch email client for $email');
+      }
+    } catch (e) {
+      _showActionSnackbar('Error launching email: $e');
+    }
+  }
+
+  Future<void> _launchMap(double lat, double lng, String address) async {
+    final Uri googleMapsUri = Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lng');
+    try {
+      if (await canLaunchUrl(googleMapsUri)) {
+        await launchUrl(googleMapsUri, mode: LaunchMode.externalApplication);
+      } else {
+        _showActionSnackbar('Could not launch maps');
+      }
+    } catch (e) {
+      _showActionSnackbar('Error launching maps: $e');
+    }
   }
 
   @override
@@ -185,21 +232,19 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                                   _buildActionCircle(
                                     icon: LucideIcons.phone,
                                     text: 'Call Office',
-                                    onTap: () => _showActionSnackbar('Dialing ${widget.office.phone}...'),
+                                    onTap: () => _launchCall(widget.office.phone),
                                   ),
                                   const SizedBox(width: 10),
                                   _buildActionCircle(
                                     icon: LucideIcons.mail,
                                     text: 'Email Office',
-                                    onTap: () => _showActionSnackbar('Mailing ${widget.office.email}...'),
+                                    onTap: () => _launchEmail(widget.office.email),
                                   ),
                                   const SizedBox(width: 10),
                                   _buildActionCircle(
                                     icon: LucideIcons.map,
                                     text: 'Map View',
-                                    onTap: () => _showActionSnackbar(
-                                      'Showing coordinates (${widget.office.latitude}, ${widget.office.longitude}) in maps...',
-                                    ),
+                                    onTap: () => _launchMap(widget.office.latitude, widget.office.longitude, widget.office.address),
                                   ),
                                 ],
                               ),
