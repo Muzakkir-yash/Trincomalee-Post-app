@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "150681432353",
+    "project_id": "trinco-staff-registry",
+    "storage_bucket": "trinco-staff-registry.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150681432353:android:90dcb5ce491f28f2010e60",
+        "android_client_info": {
+          "package_name": "com.trinco.postoffice.trinco_post_office_staff_details"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiVl6o-Msb3KUNK9vIhC-kVQCeQnS1wWk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
