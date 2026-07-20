@@ -775,39 +775,53 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              'Joined: ${member.joinDate}',
+                              'Appointment: ${member.appointmentDate}',
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                  fontSize: 12.5,
-                                  color: theme.textTheme.bodyMedium?.color?.withAlpha(160),
-                                ),
+                                fontSize: 12,
+                                color: theme.textTheme.bodyMedium?.color?.withAlpha(160),
                               ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Divider(height: 28, thickness: 0.5),
-                    // Footer Actions
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            _buildCardIconButton(
-                              icon: LucideIcons.phone,
-                              onPressed: () => _showActionSnackbar('Dialing ${member.phone}...'),
-                              theme: theme,
-                              isDark: isDark,
                             ),
-                            const SizedBox(width: 8),
-                            _buildCardIconButton(
-                              icon: LucideIcons.mail,
-                              onPressed: () => _showActionSnackbar('Emailing ${member.email}...'),
-                              theme: theme,
-                              isDark: isDark,
+                            Text(
+                              'Assume Office: ${member.assumeDate}',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                fontSize: 12,
+                                color: theme.textTheme.bodyMedium?.color?.withAlpha(160),
+                              ),
+                            ),
+                            Text(
+                              'NIC: ${member.nic} • DOB: ${member.dob}',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                fontSize: 12,
+                                color: theme.textTheme.bodyMedium?.color?.withAlpha(160),
+                              ),
+                            ),
+                            Text(
+                              'Pay Sheet No: ${member.paySheetNumber}',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                fontSize: 12,
+                                color: theme.textTheme.bodyMedium?.color?.withAlpha(160),
+                              ),
                             ),
                           ],
                         ),
+                      ),
+                    ],
+                  ),
+                  const Divider(height: 28, thickness: 0.5),
+                  // Footer Actions
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          _buildCardIconButton(
+                            icon: LucideIcons.phone,
+                            onPressed: () => _showActionSnackbar('Dialing ${member.phone}...'),
+                            theme: theme,
+                            isDark: isDark,
+                          ),
+                        ],
+                      ),
                         // Admin Actions
                         if (widget.office.type == 'Main')
                           Row(

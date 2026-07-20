@@ -4,8 +4,11 @@ class Staff {
   final String name;
   final String designation;
   final String phone;
-  final String email;
-  final String joinDate;
+  final String appointmentDate; // Renamed from joinDate
+  final String assumeDate; // Date of assume this office
+  final String nic;
+  final String dob; // Date of Birth
+  final String paySheetNumber;
   final String? avatarUrl; // Optional image URL
 
   Staff({
@@ -14,8 +17,11 @@ class Staff {
     required this.name,
     required this.designation,
     required this.phone,
-    required this.email,
-    required this.joinDate,
+    required this.appointmentDate,
+    required this.assumeDate,
+    required this.nic,
+    required this.dob,
+    required this.paySheetNumber,
     this.avatarUrl,
   });
 
@@ -25,8 +31,11 @@ class Staff {
     String? name,
     String? designation,
     String? phone,
-    String? email,
-    String? joinDate,
+    String? appointmentDate,
+    String? assumeDate,
+    String? nic,
+    String? dob,
+    String? paySheetNumber,
     String? avatarUrl,
   }) {
     return Staff(
@@ -35,8 +44,11 @@ class Staff {
       name: name ?? this.name,
       designation: designation ?? this.designation,
       phone: phone ?? this.phone,
-      email: email ?? this.email,
-      joinDate: joinDate ?? this.joinDate,
+      appointmentDate: appointmentDate ?? this.appointmentDate,
+      assumeDate: assumeDate ?? this.assumeDate,
+      nic: nic ?? this.nic,
+      dob: dob ?? this.dob,
+      paySheetNumber: paySheetNumber ?? this.paySheetNumber,
       avatarUrl: avatarUrl ?? this.avatarUrl,
     );
   }
@@ -48,8 +60,11 @@ class Staff {
       name: map['name'] ?? '',
       designation: map['designation'] ?? '',
       phone: map['phone'] ?? '',
-      email: map['email'] ?? '',
-      joinDate: map['joinDate'] ?? '',
+      appointmentDate: map['appointmentDate'] ?? map['joinDate'] ?? '',
+      assumeDate: map['assumeDate'] ?? '',
+      nic: map['nic'] ?? '',
+      dob: map['dob'] ?? '',
+      paySheetNumber: map['paySheetNumber'] ?? '',
       avatarUrl: map['avatarUrl'],
     );
   }
@@ -60,8 +75,11 @@ class Staff {
       'name': name,
       'designation': designation,
       'phone': phone,
-      'email': email,
-      'joinDate': joinDate,
+      'appointmentDate': appointmentDate,
+      'assumeDate': assumeDate,
+      'nic': nic,
+      'dob': dob,
+      'paySheetNumber': paySheetNumber,
       'avatarUrl': avatarUrl,
     };
   }

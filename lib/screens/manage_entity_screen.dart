@@ -32,8 +32,11 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
   final _staffNameController = TextEditingController();
   String _selectedDesignation = 'Counter Officer';
   final _staffPhoneController = TextEditingController();
-  final _staffEmailController = TextEditingController();
-  final _staffJoinDateController = TextEditingController();
+  final _staffNicController = TextEditingController();
+  final _staffPaySheetController = TextEditingController();
+  final _staffAppointmentDateController = TextEditingController();
+  final _staffAssumeDateController = TextEditingController();
+  final _staffDobController = TextEditingController();
 
   // Equipment Form controllers & selections
   final _equipNameController = TextEditingController();
@@ -80,13 +83,18 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
         final s = widget.staff!;
         _staffNameController.text = s.name;
         _staffPhoneController.text = s.phone;
-        _staffEmailController.text = s.email;
-        _staffJoinDateController.text = s.joinDate;
+        _staffNicController.text = s.nic;
+        _staffPaySheetController.text = s.paySheetNumber;
+        _staffAppointmentDateController.text = s.appointmentDate;
+        _staffAssumeDateController.text = s.assumeDate;
+        _staffDobController.text = s.dob;
         if (_designations.contains(s.designation)) {
           _selectedDesignation = s.designation;
         }
       } else {
-        _staffJoinDateController.text = DateTime.now().toString().split(' ')[0];
+        _staffAppointmentDateController.text = DateTime.now().toString().split(' ')[0];
+        _staffAssumeDateController.text = DateTime.now().toString().split(' ')[0];
+        _staffDobController.text = '1990-01-01';
       }
     } else {
       if (widget.equipment != null) {
@@ -109,19 +117,23 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
   void dispose() {
     _staffNameController.dispose();
     _staffPhoneController.dispose();
-    _staffEmailController.dispose();
-    _staffJoinDateController.dispose();
+    _staffNicController.dispose();
+    _staffPaySheetController.dispose();
+    _staffAppointmentDateController.dispose();
+    _staffAssumeDateController.dispose();
+    _staffDobController.dispose();
     _equipNameController.dispose();
     _equipQtyController.dispose();
     super.dispose();
   }
 
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDate(BuildContext context, TextEditingController controller,
+      {DateTime? initialDate, DateTime? firstDate, DateTime? lastDate}) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      initialDate: initialDate ?? DateTime.now(),
+      firstDate: firstDate ?? DateTime(1900),
+      lastDate: lastDate ?? DateTime(2100),
       builder: (context, child) {
         final isDark = Theme.of(context).brightness == Brightness.dark;
         return Theme(
@@ -144,7 +156,7 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
     );
     if (picked != null) {
       setState(() {
-        _staffJoinDateController.text = picked.toString().split(' ')[0];
+        controller.text = picked.toString().split(' ')[0];
       });
     }
   }
@@ -160,8 +172,11 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
           name: _staffNameController.text.trim(),
           designation: _selectedDesignation,
           phone: _staffPhoneController.text.trim(),
-          email: _staffEmailController.text.trim(),
-          joinDate: _staffJoinDateController.text,
+          nic: _staffNicController.text.trim(),
+          paySheetNumber: _staffPaySheetController.text.trim(),
+          appointmentDate: _staffAppointmentDateController.text,
+          assumeDate: _staffAssumeDateController.text,
+          dob: _staffDobController.text,
         );
         provider.updateStaff(updatedStaff);
       } else {
@@ -171,8 +186,11 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
           name: _staffNameController.text.trim(),
           designation: _selectedDesignation,
           phone: _staffPhoneController.text.trim(),
-          email: _staffEmailController.text.trim(),
-          joinDate: _staffJoinDateController.text,
+          nic: _staffNicController.text.trim(),
+          paySheetNumber: _staffPaySheetController.text.trim(),
+          appointmentDate: _staffAppointmentDateController.text,
+          assumeDate: _staffAssumeDateController.text,
+          dob: _staffDobController.text,
         );
         provider.addStaff(newStaff);
       }
@@ -409,37 +427,88 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
         ),
         const SizedBox(height: 20),
 
-        // Email
+        // NIC
         TextFormField(
-          controller: _staffEmailController,
-          keyboardType: TextInputType.emailAddress,
+          controller: _staffNicController,
           style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15),
           decoration: const InputDecoration(
-            labelText: 'Email Address',
-            hintText: 'e.g. user@slpost.lk',
-            prefixIcon: Icon(LucideIcons.mail, size: 18),
+            labelText: 'NIC Number',
+            hintText: 'e.g. 199012345678 or 901234567V',
+            prefixIcon: Icon(LucideIcons.credit_card, size: 18),
           ),
           validator: (val) {
             if (val == null || val.trim().isEmpty) {
-              return 'Please enter an email address';
+              return 'Please enter NIC number';
             }
-            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(val.trim())) {
-              return 'Please enter a valid email address';
+            if (!RegExp(r'^([0-9]{9}[vVxX]|[0-9]{12})$').hasMatch(val.trim())) {
+              return 'Please enter a valid NIC (9 digits + V/X or 12 digits)';
             }
             return null;
           },
         ),
         const SizedBox(height: 20),
 
-        // Join Date Pick
+        // Pay Sheet Number
         TextFormField(
-          controller: _staffJoinDateController,
-          readOnly: true,
-          onTap: () => _selectDate(context),
+          controller: _staffPaySheetController,
           style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15),
           decoration: const InputDecoration(
-            labelText: 'Registry Join Date',
+            labelText: 'Pay Sheet Number',
+            hintText: 'e.g. PS-1234',
+            prefixIcon: Icon(LucideIcons.receipt, size: 18),
+          ),
+          validator: (val) {
+            if (val == null || val.trim().isEmpty) {
+              return 'Please enter Pay Sheet Number';
+            }
+            return null;
+          },
+        ),
+        const SizedBox(height: 20),
+
+        // DOB
+        TextFormField(
+          controller: _staffDobController,
+          readOnly: true,
+          onTap: () => _selectDate(
+            context,
+            _staffDobController,
+            initialDate: DateTime(1990),
+            firstDate: DateTime(1940),
+            lastDate: DateTime.now(),
+          ),
+          style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15),
+          decoration: const InputDecoration(
+            labelText: 'Date of Birth (DOB)',
+            prefixIcon: Icon(LucideIcons.cake, size: 18),
+            suffixIcon: Icon(LucideIcons.calendar_days, size: 18),
+          ),
+        ),
+        const SizedBox(height: 20),
+
+        // Date of Appointment
+        TextFormField(
+          controller: _staffAppointmentDateController,
+          readOnly: true,
+          onTap: () => _selectDate(context, _staffAppointmentDateController),
+          style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15),
+          decoration: const InputDecoration(
+            labelText: 'Date of Appointment',
             prefixIcon: Icon(LucideIcons.calendar, size: 18),
+            suffixIcon: Icon(LucideIcons.calendar_days, size: 18),
+          ),
+        ),
+        const SizedBox(height: 20),
+
+        // Date of assume this office
+        TextFormField(
+          controller: _staffAssumeDateController,
+          readOnly: true,
+          onTap: () => _selectDate(context, _staffAssumeDateController),
+          style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15),
+          decoration: const InputDecoration(
+            labelText: 'Date of assume this office',
+            prefixIcon: Icon(LucideIcons.calendar_clock, size: 18),
             suffixIcon: Icon(LucideIcons.calendar_days, size: 18),
           ),
         ),
