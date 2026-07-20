@@ -674,42 +674,43 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
       );
     }
 
-  Widget _buildDetailItem(ThemeData theme, IconData icon, String label, String value) {
-    if (value.trim().isEmpty) return const SizedBox.shrink();
+  Widget _buildDetailRow(String label1, String value1, String label2, String value2, ThemeData theme) {
     final isDark = theme.brightness == Brightness.dark;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1E2640).withAlpha(120) : theme.colorScheme.primary.withAlpha(8),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: isDark ? const Color(0xFFFDA4AF).withAlpha(15) : theme.colorScheme.primary.withAlpha(10),
-          width: 0.8,
-        ),
-      ),
+    final labelStyle = TextStyle(
+      fontSize: 9.5,
+      fontWeight: FontWeight.w600,
+      letterSpacing: 0.8,
+      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+    );
+    final valueStyle = TextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.bold,
+      color: isDark ? Colors.white : const Color(0xFF1E293B),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 13,
-            color: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
-          ),
-          const SizedBox(width: 6),
-          Text(
-            '$label: ',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: (isDark ? Colors.white : Colors.black).withAlpha(150),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label1.toUpperCase(), style: labelStyle),
+                const SizedBox(height: 3),
+                Text(value1.trim().isEmpty ? '-' : value1, style: valueStyle),
+              ],
             ),
           ),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.bold,
-              color: isDark ? Colors.white : Colors.black,
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label2.toUpperCase(), style: labelStyle),
+                const SizedBox(height: 3),
+                Text(value2.trim().isEmpty ? '-' : value2, style: valueStyle),
+              ],
             ),
           ),
         ],
@@ -762,16 +763,16 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                     children: [
                       // Double-ring avatar container
                       Container(
-                        width: 58,
-                        height: 58,
+                        width: 48,
+                        height: 48,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: isDark ? const Color(0xFFFDA4AF).withAlpha(70) : theme.colorScheme.primary.withAlpha(40),
-                            width: 2.0,
+                            color: isDark ? const Color(0xFFFDA4AF).withAlpha(50) : theme.colorScheme.primary.withAlpha(30),
+                            width: 1.5,
                           ),
                         ),
-                        padding: const EdgeInsets.all(3),
+                        padding: const EdgeInsets.all(2),
                         child: CircleAvatar(
                           backgroundColor: isDark ? const Color(0xFF1E2640) : theme.colorScheme.primary.withAlpha(15),
                           child: Text(
@@ -779,14 +780,13 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                             style: TextStyle(
                               color: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
                               fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                              fontSize: 15,
                               fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      // Details
+                      const SizedBox(width: 14),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -796,44 +796,28 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
+                                letterSpacing: -0.2,
                               ),
                             ),
-                            const SizedBox(height: 4),
-                            // Role Badge
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: isDark ? const Color(0xFF1E2640) : theme.colorScheme.primary.withAlpha(14),
-                                borderRadius: BorderRadius.circular(8),
+                            const SizedBox(height: 2),
+                            Text(
+                              member.designation.toUpperCase(),
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
                               ),
-                              child: Text(
-                                member.designation.toUpperCase(),
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
-                                  fontSize: 9.5,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.2,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Wrap(
-                              spacing: 8,
-                              runSpacing: 8,
-                              children: [
-                                _buildDetailItem(theme, LucideIcons.calendar, 'Appointed', member.appointmentDate),
-                                _buildDetailItem(theme, LucideIcons.calendar_days, 'Assumed', member.assumeDate),
-                                _buildDetailItem(theme, LucideIcons.credit_card, 'NIC', member.nic),
-                                _buildDetailItem(theme, LucideIcons.cake, 'DOB', member.dob),
-                                _buildDetailItem(theme, LucideIcons.receipt, 'Pay Sheet', member.paySheetNumber),
-                                _buildDetailItem(theme, LucideIcons.phone, 'Phone', member.phone),
-                              ],
                             ),
                           ],
                         ),
                       ),
                     ],
                   ),
+                  const Divider(height: 28, thickness: 0.5),
+                  _buildDetailRow('Appointment Date', member.appointmentDate, 'Date of assume office', member.assumeDate, theme),
+                  _buildDetailRow('NIC Number', member.nic, 'Pay Sheet Number', member.paySheetNumber, theme),
+                  _buildDetailRow('Date of Birth (DOB)', member.dob, 'Contact Phone', member.phone, theme),
                   if (widget.office.type == 'Main') ...[
                     const Divider(height: 28, thickness: 0.5),
                     // Footer Actions
