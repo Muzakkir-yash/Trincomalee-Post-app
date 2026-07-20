@@ -99,8 +99,13 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
     final isDark = theme.brightness == Brightness.dark;
     final officeProvider = Provider.of<OfficeProvider>(context);
 
-    final staffList = officeProvider.getStaffForOffice(widget.office.id);
-    final equipmentList = officeProvider.getEquipmentForOffice(widget.office.id);
+    final office = officeProvider.postOffices.firstWhere(
+      (o) => o.id == widget.office.id,
+      orElse: () => widget.office,
+    );
+
+    final staffList = officeProvider.getStaffForOffice(office.id);
+    final equipmentList = officeProvider.getEquipmentForOffice(office.id);
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -124,6 +129,25 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
+              actions: office.type == 'Main'
+                  ? [
+                      Container(
+                        margin: const EdgeInsets.only(right: 12, top: 8, bottom: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withAlpha(50),
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          icon: const Icon(LucideIcons.pencil, color: Colors.white, size: 18),
+                          onPressed: () {
+                            _authenticateAction(() {
+                              _showEditOfficeDialog(context, office);
+                            });
+                          },
+                        ),
+                      ),
+                    ]
+                  : null,
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
                   fit: StackFit.expand,
@@ -173,7 +197,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(
-                                  widget.office.type.toUpperCase(),
+                                  office.type.toUpperCase(),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 10,
@@ -184,7 +208,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                'ZIP: ${widget.office.code}',
+                                'ZIP: ${office.code}',
                                 style: TextStyle(
                                   color: Colors.white.withAlpha(200),
                                   fontSize: 12,
@@ -196,7 +220,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            widget.office.name,
+                            office.name,
                             style: GoogleFonts.spaceGrotesk(
                               color: Colors.white,
                               fontSize: 26,
@@ -211,7 +235,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                               const SizedBox(width: 6),
                               Expanded(
                                 child: Text(
-                                    widget.office.address,
+                                    office.address,
                                     style: theme.textTheme.bodyMedium?.copyWith(
                                       color: Colors.white.withAlpha(210),
                                       fontSize: 13,
@@ -232,19 +256,19 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                                   _buildActionCircle(
                                     icon: LucideIcons.phone,
                                     text: 'Call Office',
-                                    onTap: () => _launchCall(widget.office.phone),
+                                    onTap: () => _launchCall(office.phone),
                                   ),
                                   const SizedBox(width: 10),
                                   _buildActionCircle(
                                     icon: LucideIcons.mail,
                                     text: 'Email Office',
-                                    onTap: () => _launchEmail(widget.office.email),
+                                    onTap: () => _launchEmail(office.email),
                                   ),
                                   const SizedBox(width: 10),
                                   _buildActionCircle(
                                     icon: LucideIcons.map,
                                     text: 'Map View',
-                                    onTap: () => _launchMap(widget.office.latitude, widget.office.longitude, widget.office.address),
+                                    onTap: () => _launchMap(office.latitude, office.longitude, office.address),
                                   ),
                                 ],
                               ),
@@ -302,7 +326,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
             ],
           ),
         ),
-        floatingActionButton: widget.office.type == 'Main'
+        floatingActionButton: office.type == 'Main'
             ? FloatingActionButton.extended(
                 icon: const Icon(LucideIcons.plus, size: 18),
                 label: Text(_tabController.index == 0 ? 'Register Staff' : 'Log Asset'),
@@ -313,7 +337,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                         context,
                         MaterialPageRoute(
                           builder: (context) => ManageEntityScreen(
-                            officeId: widget.office.id,
+                            officeId: office.id,
                             entityType: EntityType.staff,
                           ),
                         ),
@@ -323,7 +347,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                         context,
                         MaterialPageRoute(
                           builder: (context) => ManageEntityScreen(
-                            officeId: widget.office.id,
+                            officeId: office.id,
                             entityType: EntityType.equipment,
                           ),
                         ),
@@ -337,6 +361,10 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
     }
 
   void _authenticateAction(VoidCallback onSuccess) {
+    final office = Provider.of<OfficeProvider>(context, listen: false).postOffices.firstWhere(
+      (o) => o.id == widget.office.id,
+      orElse: () => widget.office,
+    );
     final controller = TextEditingController();
     final formKey = GlobalKey<FormState>();
     bool isObscured = true;
@@ -377,7 +405,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'Please enter the unique password for ${widget.office.name} to perform this administrative task.',
+                      'Please enter the unique password for ${office.name} to perform this administrative task.',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.textTheme.bodyMedium?.color?.withAlpha(180),
                         fontSize: 13.5,
@@ -408,7 +436,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                         if (val == null || val.isEmpty) {
                           return 'Please enter the password';
                         }
-                        if (val != widget.office.password) {
+                        if (val != office.password) {
                           return 'Incorrect password. Access denied.';
                         }
                         return null;
@@ -439,6 +467,167 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   ),
                   child: const Text('Authorize', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _showEditOfficeDialog(BuildContext context, PostOffice office) {
+    final nameController = TextEditingController(text: office.name);
+    final zipController = TextEditingController(text: office.code);
+    final phoneController = TextEditingController(text: office.phone);
+    final emailController = TextEditingController(text: office.email);
+    final formKey = GlobalKey<FormState>();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
+
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+              backgroundColor: theme.cardTheme.color,
+              title: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: isDark ? const Color(0xFFFDA4AF).withAlpha(20) : theme.colorScheme.primary.withAlpha(20),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      LucideIcons.pencil,
+                      color: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text('Edit Office Details', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ],
+              ),
+              content: Form(
+                key: formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Update the core details for ${office.name}.',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.textTheme.bodyMedium?.color?.withAlpha(180),
+                          fontSize: 13.5,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: nameController,
+                        style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15),
+                        decoration: const InputDecoration(
+                          labelText: 'Office Name',
+                          prefixIcon: Icon(LucideIcons.building, size: 18),
+                        ),
+                        validator: (val) {
+                          if (val == null || val.trim().isEmpty) {
+                            return 'Please enter the office name';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: zipController,
+                        keyboardType: TextInputType.number,
+                        style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15),
+                        decoration: const InputDecoration(
+                          labelText: 'ZIP Code',
+                          prefixIcon: Icon(LucideIcons.binary, size: 18),
+                        ),
+                        validator: (val) {
+                          if (val == null || val.trim().isEmpty) {
+                            return 'Please enter a ZIP code';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: phoneController,
+                        keyboardType: TextInputType.phone,
+                        style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15),
+                        decoration: const InputDecoration(
+                          labelText: 'Call Office (Phone)',
+                          prefixIcon: Icon(LucideIcons.phone, size: 18),
+                        ),
+                        validator: (val) {
+                          if (val == null || val.trim().isEmpty) {
+                            return 'Please enter a contact number';
+                          }
+                          if (!RegExp(r'^[0-9+ -]{7,15}$').hasMatch(val.trim())) {
+                            return 'Please enter a valid phone number';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15),
+                        decoration: const InputDecoration(
+                          labelText: 'Email Address',
+                          prefixIcon: Icon(LucideIcons.mail, size: 18),
+                        ),
+                        validator: (val) {
+                          if (val == null || val.trim().isEmpty) {
+                            return 'Please enter an email address';
+                          }
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(val.trim())) {
+                            return 'Please enter a valid email address';
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: TextButton.styleFrom(
+                    foregroundColor: theme.textTheme.bodyMedium?.color?.withAlpha(120),
+                  ),
+                  child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      final updatedOffice = office.copyWith(
+                        name: nameController.text.trim(),
+                        code: zipController.text.trim(),
+                        phone: phoneController.text.trim(),
+                        email: emailController.text.trim(),
+                      );
+                      Provider.of<OfficeProvider>(context, listen: false).updatePostOffice(updatedOffice);
+                      Navigator.pop(context); // Close dialog
+                      _showActionSnackbar('Office details updated successfully.');
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: isDark ? const Color(0xFFEF4444) : theme.colorScheme.primary,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  ),
+                  child: const Text('Save', style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
               ],
             );

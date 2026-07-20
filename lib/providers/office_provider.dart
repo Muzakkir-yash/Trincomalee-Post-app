@@ -156,6 +156,21 @@ class OfficeProvider with ChangeNotifier {
     return _equipmentList.where((equip) => equip.postOfficeId == officeId).toList();
   }
 
+  // Post Office CRUD Operations
+  void updatePostOffice(PostOffice updatedOffice) {
+    if (_isUsingFirestore) {
+      _db.collection('post_offices').doc(updatedOffice.id).update(updatedOffice.toMap()).catchError((e) {
+        debugPrint("Firestore: Failed to update post office details: $e");
+      });
+    } else {
+      final index = _postOffices.indexWhere((o) => o.id == updatedOffice.id);
+      if (index != -1) {
+        _postOffices[index] = updatedOffice;
+        notifyListeners();
+      }
+    }
+  }
+
   // Staff CRUD Operations
   void addStaff(Staff staff) {
     if (_isUsingFirestore) {
