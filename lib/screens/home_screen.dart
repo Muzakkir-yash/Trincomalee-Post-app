@@ -6,6 +6,7 @@ import '../providers/theme_provider.dart';
 import '../models/post_office.dart';
 import '../theme/app_theme.dart';
 import 'detail_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -124,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildAppBar(ThemeData theme, ThemeProvider themeProvider, bool isDark) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
         color: theme.scaffoldBackgroundColor,
         border: Border(
@@ -137,51 +138,84 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
-                      shape: BoxShape.circle,
-                    ),
+              // Professional Logo Emblem
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: isDark
+                        ? [const Color(0xFFEF4444).withAlpha(40), const Color(0xFFB91C1C).withAlpha(10)]
+                        : [const Color(0xFFC01F2F).withAlpha(20), const Color(0xFFC01F2F).withAlpha(5)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                  const SizedBox(width: 6),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: isDark ? const Color(0xFFFDA4AF).withAlpha(40) : const Color(0xFFC01F2F).withAlpha(30),
+                    width: 1.5,
+                  ),
+                ),
+                child: Center(
+                  child: Icon(
+                    LucideIcons.landmark,
+                    size: 20,
+                    color: isDark ? const Color(0xFFFDA4AF) : const Color(0xFFC01F2F),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 14),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
                     'TRINCOMALEE DIVISION',
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      letterSpacing: 2.0,
-                      fontWeight: FontWeight.bold,
-                      color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 10,
+                      letterSpacing: 1.8,
+                      fontWeight: FontWeight.w800,
+                      color: isDark ? const Color(0xFFFDA4AF) : const Color(0xFFC01F2F),
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Text(
+                    'Postal Hub Registry',
+                    style: GoogleFonts.plusJakartaSans(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.3,
+                      color: isDark ? Colors.white : const Color(0xFF1E293B),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 2),
-              Text(
-                'Postal Hub Registry',
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontSize: 22,
-                  letterSpacing: -0.5,
-                ),
-              ),
             ],
           ),
-          IconButton(
-            icon: Icon(
-              themeProvider.isDarkMode ? LucideIcons.sun : LucideIcons.moon,
-              color: isDark ? Colors.amber : theme.colorScheme.primary,
+          // Theme Switcher Button styled to be more premium
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: isDark ? const Color(0xFF1E2640) : const Color(0xFFE2E8F0),
+                width: 1.2,
+              ),
             ),
-            onPressed: () {
-              themeProvider.toggleTheme(!themeProvider.isDarkMode);
-            },
-            style: IconButton.styleFrom(
-              backgroundColor: isDark ? const Color(0xFF151B2C) : const Color(0xFFF1F5F9),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            child: IconButton(
+              icon: Icon(
+                themeProvider.isDarkMode ? LucideIcons.sun : LucideIcons.moon,
+                color: isDark ? Colors.amber : const Color(0xFF475569),
+                size: 18,
+              ),
+              onPressed: () {
+                themeProvider.toggleTheme(!themeProvider.isDarkMode);
+              },
+              style: IconButton.styleFrom(
+                backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                padding: const EdgeInsets.all(10),
+              ),
             ),
           ),
         ],
