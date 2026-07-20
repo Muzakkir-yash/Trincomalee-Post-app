@@ -389,12 +389,12 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFFFDA4AF).withAlpha(20) : theme.colorScheme.primary.withAlpha(20),
+                      color: isDark ? const Color(0xFF93C5FD).withAlpha(20) : theme.colorScheme.primary.withAlpha(20),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       LucideIcons.lock,
-                      color: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
+                      color: isDark ? const Color(0xFF93C5FD) : theme.colorScheme.primary,
                       size: 20,
                     ),
                   ),
@@ -503,12 +503,12 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFFFDA4AF).withAlpha(20) : theme.colorScheme.primary.withAlpha(20),
+                      color: isDark ? const Color(0xFF93C5FD).withAlpha(20) : theme.colorScheme.primary.withAlpha(20),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       LucideIcons.pencil,
-                      color: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
+                      color: isDark ? const Color(0xFF93C5FD) : theme.colorScheme.primary,
                       size: 20,
                     ),
                   ),
@@ -768,7 +768,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: isDark ? const Color(0xFFFDA4AF).withAlpha(50) : theme.colorScheme.primary.withAlpha(30),
+                            color: isDark ? const Color(0xFF93C5FD).withAlpha(50) : theme.colorScheme.primary.withAlpha(30),
                             width: 1.5,
                           ),
                         ),
@@ -778,7 +778,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                           child: Text(
                             initial,
                             style: TextStyle(
-                              color: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
+                              color: isDark ? const Color(0xFF93C5FD) : theme.colorScheme.primary,
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
                               fontFamily: GoogleFonts.spaceGrotesk().fontFamily,
@@ -803,7 +803,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                             Text(
                               member.designation.toUpperCase(),
                               style: theme.textTheme.labelSmall?.copyWith(
-                                color: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
+                                color: isDark ? const Color(0xFF93C5FD) : theme.colorScheme.primary,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 0.5,
@@ -842,7 +842,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                           icon: const Icon(LucideIcons.pencil, size: 13),
                           label: const Text('Edit'),
                           style: TextButton.styleFrom(
-                            foregroundColor: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
+                            foregroundColor: isDark ? const Color(0xFF93C5FD) : theme.colorScheme.primary,
                             textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                           ),
                         ),
@@ -1001,7 +1001,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
-                                color: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
+                                color: isDark ? const Color(0xFF93C5FD) : theme.colorScheme.primary,
                               ),
                             ),
                           ],
@@ -1048,7 +1048,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                             constraints: const BoxConstraints(),
                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             style: IconButton.styleFrom(
-                              foregroundColor: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
+                              foregroundColor: isDark ? const Color(0xFF93C5FD) : theme.colorScheme.primary,
                             ),
                           ),
                           const SizedBox(width: 4),

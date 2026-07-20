@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Brand Tones - Premium Crimson, Rose Gold & Soft Slates
-  static const Color primaryRed = Color(0xFFC01F2F); // Rich soft Crimson Red
-  static const Color secondaryRed = Color(0xFF90111D); // Burgundy Red for deep contrast
-  static const Color softRed = Color(0xFFFFF1F2); // Rose 50 tint (super clean pinkish/white background)
+  // Brand Tones - Premium Indigo & Soft Slates
+  static const Color primaryBlue = Color(0xFF1D4ED8); // Rich professional Blue (Blue 700)
+  static const Color secondaryBlue = Color(0xFF1E3A8A); // Deep Navy Blue for deep contrast (Blue 900)
+  static const Color softBlue = Color(0xFFEFF6FF); // Blue 50 tint (super clean blue/white background)
   static const Color glassWhite = Color(0xCCFFFFFF); // Transparent frosted white
   
   // Light Mode Neutrals (Modern iOS/Material Slate theme)
@@ -13,27 +13,27 @@ class AppTheme {
   static const Color cardLight = Colors.white;
   static const Color textDark = Color(0xFF0F172A); // Slate 900 (ultra crisp, premium readability)
   static const Color textMuted = Color(0xFF64748B); // Slate 500
-
+ 
   // Dark Mode Neutrals (Premium deep space theme)
   static const Color bgDark = Color(0xFF060814); // Deep space black/blue base
   static const Color cardDark = Color(0xFF0F1326); // Frosted navy card backplate
   static const Color borderDark = Color(0xFF1E2640); // Soft navy border
   static const Color textLight = Color(0xFFF8FAFC);
   static const Color textLightMuted = Color(0xFF94A3B8);
-
+ 
   // Status Tones (Vibrant, high contrast)
   static const Color success = Color(0xFF10B981); // Emerald 500
   static const Color warning = Color(0xFFF59E0B); // Amber 500
   static const Color danger = Color(0xFFEF4444); // Red 500
-
+ 
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
       scaffoldBackgroundColor: bgLight,
       colorScheme: const ColorScheme.light(
-        primary: primaryRed,
-        secondary: secondaryRed,
+        primary: primaryBlue,
+        secondary: secondaryBlue,
         surface: cardLight,
         error: danger,
       ),
@@ -66,15 +66,15 @@ class AppTheme {
         iconTheme: const IconThemeData(color: textDark),
       ),
       tabBarTheme: TabBarThemeData(
-        labelColor: primaryRed,
+        labelColor: primaryBlue,
         unselectedLabelColor: textMuted,
-        indicatorColor: primaryRed,
+        indicatorColor: primaryBlue,
         indicatorSize: TabBarIndicatorSize.tab,
         labelStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold, fontSize: 15),
         unselectedLabelStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600, fontSize: 15),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: primaryRed,
+        backgroundColor: primaryBlue,
         foregroundColor: Colors.white,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
@@ -93,7 +93,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(color: primaryRed, width: 1.8),
+          borderSide: const BorderSide(color: primaryBlue, width: 1.8),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
@@ -104,15 +104,15 @@ class AppTheme {
       ),
     );
   }
-
+ 
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: bgDark,
       colorScheme: const ColorScheme.dark(
-        primary: Color(0xFFFDA4AF), // Soft rose red to prevent screen glare
-        secondary: Color(0xFFF43F5E),
+        primary: Color(0xFF93C5FD), // Soft sky blue to prevent screen glare (Blue 300)
+        secondary: Color(0xFF3B82F6), // Accent Blue 500
         surface: cardDark,
         error: danger,
       ),
@@ -145,15 +145,15 @@ class AppTheme {
         iconTheme: const IconThemeData(color: textLight),
       ),
       tabBarTheme: TabBarThemeData(
-        labelColor: const Color(0xFFFDA4AF),
+        labelColor: const Color(0xFF93C5FD),
         unselectedLabelColor: textLightMuted,
-        indicatorColor: const Color(0xFFFDA4AF),
+        indicatorColor: const Color(0xFF93C5FD),
         indicatorSize: TabBarIndicatorSize.tab,
         labelStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold, fontSize: 15),
         unselectedLabelStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600, fontSize: 15),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: const Color(0xFFE11D48), // Rose 600
+        backgroundColor: const Color(0xFF2563EB), // Blue 600
         foregroundColor: Colors.white,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
@@ -172,7 +172,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(color: Color(0xFFFDA4AF), width: 1.8),
+          borderSide: const BorderSide(color: Color(0xFF93C5FD), width: 1.8),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),

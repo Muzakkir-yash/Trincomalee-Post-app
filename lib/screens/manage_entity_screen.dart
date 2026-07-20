@@ -140,12 +140,12 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
           data: Theme.of(context).copyWith(
             colorScheme: isDark
                 ? const ColorScheme.dark(
-                    primary: Color(0xFFFCA5A5),
+                    primary: Color(0xFF93C5FD),
                     onPrimary: Colors.black,
                     surface: Color(0xFF1E293B),
                   )
                 : const ColorScheme.light(
-                    primary: Color(0xFFC01F2F),
+                    primary: Color(0xFF1D4ED8),
                     onPrimary: Colors.white,
                     surface: Colors.white,
                   ),
@@ -307,8 +307,8 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: isDark
-                            ? [const Color(0xFFEF4444), const Color(0xFFB91C1C)]
-                            : [theme.colorScheme.primary, const Color(0xFF9B1623)],
+                            ? [const Color(0xFF3B82F6), const Color(0xFF1D4ED8)]
+                            : [theme.colorScheme.primary, const Color(0xFF1E3A8A)],
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       ),
@@ -351,7 +351,7 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
           children: [
             Icon(
               LucideIcons.user, 
-              color: isDark ? const Color(0xFFFCA5A5) : theme.colorScheme.primary, 
+              color: isDark ? const Color(0xFF93C5FD) : theme.colorScheme.primary, 
               size: 20,
             ),
             const SizedBox(width: 8),
@@ -524,7 +524,7 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
           children: [
             Icon(
               LucideIcons.package, 
-              color: isDark ? const Color(0xFFFCA5A5) : theme.colorScheme.primary, 
+              color: isDark ? const Color(0xFF93C5FD) : theme.colorScheme.primary, 
               size: 20,
             ),
             const SizedBox(width: 8),

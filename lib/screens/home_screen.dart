@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 hintText: 'Search office name, postal code, region...',
                                 prefixIcon: Icon(
                                   LucideIcons.search,
-                                  color: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
+                                  color: isDark ? const Color(0xFF93C5FD) : theme.colorScheme.primary,
                                   size: 20,
                                 ),
                                 suffixIcon: _searchController.text.isNotEmpty
@@ -147,14 +147,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: isDark
-                        ? [const Color(0xFFEF4444).withAlpha(40), const Color(0xFFB91C1C).withAlpha(10)]
-                        : [const Color(0xFFC01F2F).withAlpha(20), const Color(0xFFC01F2F).withAlpha(5)],
+                        ? [const Color(0xFF3B82F6).withAlpha(40), const Color(0xFF1D4ED8).withAlpha(10)]
+                        : [const Color(0xFF1D4ED8).withAlpha(20), const Color(0xFF1D4ED8).withAlpha(5)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: isDark ? const Color(0xFFFDA4AF).withAlpha(40) : const Color(0xFFC01F2F).withAlpha(30),
+                    color: isDark ? const Color(0xFF93C5FD).withAlpha(40) : const Color(0xFF1D4ED8).withAlpha(30),
                     width: 1.5,
                   ),
                 ),
@@ -162,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Icon(
                     LucideIcons.landmark,
                     size: 20,
-                    color: isDark ? const Color(0xFFFDA4AF) : const Color(0xFFC01F2F),
+                    color: isDark ? const Color(0xFF93C5FD) : const Color(0xFF1D4ED8),
                   ),
                 ),
               ),
@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontSize: 10,
                       letterSpacing: 1.8,
                       fontWeight: FontWeight.w800,
-                      color: isDark ? const Color(0xFFFDA4AF) : const Color(0xFFC01F2F),
+                      color: isDark ? const Color(0xFF93C5FD) : const Color(0xFF1D4ED8),
                     ),
                   ),
                   const SizedBox(height: 3),
@@ -237,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 gradient: LinearGradient(
                   colors: isDark
                       ? [const Color(0xFF0F1326), const Color(0xFF060814)]
-                      : [theme.colorScheme.primary, const Color(0xFF90111D)],
+                      : [theme.colorScheme.primary, const Color(0xFF1D4ED8)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -252,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 160,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: (isDark ? const Color(0xFFFDA4AF) : Colors.white).withAlpha(isDark ? 12 : 30),
+                  color: (isDark ? const Color(0xFF93C5FD) : Colors.white).withAlpha(isDark ? 12 : 30),
                 ),
               ),
             ),
@@ -265,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 120,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: (isDark ? const Color(0xFFFDA4AF) : Colors.white).withAlpha(isDark ? 8 : 18),
+                  color: (isDark ? const Color(0xFF93C5FD) : Colors.white).withAlpha(isDark ? 8 : 18),
                 ),
               ),
             ),
@@ -280,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: LucideIcons.building,
                     value: provider.totalPostOffices.toString(),
                     label: 'Offices',
-                    color: isDark ? const Color(0xFFFDA4AF) : Colors.white,
+                    color: isDark ? const Color(0xFF93C5FD) : Colors.white,
                     theme: theme,
                   ),
                   Container(
@@ -292,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: LucideIcons.users,
                     value: provider.totalStaffCount.toString(),
                     label: 'Staff Registry',
-                    color: isDark ? const Color(0xFFFDA4AF) : Colors.white,
+                    color: isDark ? const Color(0xFF93C5FD) : Colors.white,
                     theme: theme,
                   ),
                   Container(
@@ -304,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: LucideIcons.package_check,
                     value: provider.totalEquipmentCount.toString(),
                     label: 'Inventory',
-                    color: isDark ? const Color(0xFFFDA4AF) : Colors.white,
+                    color: isDark ? const Color(0xFF93C5FD) : Colors.white,
                     theme: theme,
                   ),
                 ],
@@ -377,7 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   provider.updateTypeFilter(filter);
                 }
               },
-              selectedColor: isDark ? const Color(0xFFE11D48) : theme.colorScheme.primary,
+              selectedColor: isDark ? const Color(0xFF3B82F6) : theme.colorScheme.primary,
               checkmarkColor: Colors.white,
               labelStyle: theme.textTheme.bodyMedium?.copyWith(
                 color: isSelected 
@@ -463,12 +463,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: BoxDecoration(
                       color: isMain
                           ? theme.colorScheme.primary.withAlpha(16)
-                          : (isDark ? const Color(0xFFFDA4AF).withAlpha(16) : const Color(0xFF90111D).withAlpha(16)),
+                          : (isDark ? const Color(0xFF93C5FD).withAlpha(16) : const Color(0xFF1E3A8A).withAlpha(16)),
                       borderRadius: BorderRadius.circular(18),
                       border: Border.all(
                         color: isMain 
                             ? theme.colorScheme.primary.withAlpha(40) 
-                            : (isDark ? const Color(0xFFFDA4AF).withAlpha(40) : const Color(0xFF90111D).withAlpha(40)),
+                            : (isDark ? const Color(0xFF93C5FD).withAlpha(40) : const Color(0xFF1E3A8A).withAlpha(40)),
                         width: 1.5,
                       ),
                     ),
@@ -477,7 +477,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         isMain ? LucideIcons.building : LucideIcons.store,
                         color: isMain 
                             ? theme.colorScheme.primary 
-                            : (isDark ? const Color(0xFFFDA4AF) : const Color(0xFFC01F2F)),
+                            : (isDark ? const Color(0xFF93C5FD) : const Color(0xFF1D4ED8)),
                         size: 24,
                       ),
                     ),
@@ -509,7 +509,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration: BoxDecoration(
                                 color: isMain
                                     ? theme.colorScheme.primary.withAlpha(16)
-                                    : (isDark ? const Color(0xFFFDA4AF).withAlpha(16) : const Color(0xFF90111D).withAlpha(16)),
+                                    : (isDark ? const Color(0xFF93C5FD).withAlpha(16) : const Color(0xFF1E3A8A).withAlpha(16)),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
@@ -520,7 +520,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   letterSpacing: 0.5,
                                   color: isMain 
                                       ? theme.colorScheme.primary 
-                                      : (isDark ? const Color(0xFFFDA4AF) : const Color(0xFFC01F2F)),
+                                      : (isDark ? const Color(0xFF93C5FD) : const Color(0xFF1D4ED8)),
                                 ),
                               ),
                             ),

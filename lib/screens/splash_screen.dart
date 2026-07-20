@@ -82,8 +82,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         const Color(0xFF151930),
                       ]
                     : [
-                        const Color(0xFF881337), // Deep Rose Red
-                        const Color(0xFFBE123C), // Strong Crimson Rose
+                        const Color(0xFF1E3A8A), // Deep Navy Blue
+                        const Color(0xFF2563EB), // Strong Royal Blue
                         const Color(0xFFF8FAFC), // Off-white Slate
                       ],
                 stops: isDark ? const [0.0, 0.65, 1.0] : const [0.0, 0.5, 1.0],
@@ -103,7 +103,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 boxShadow: [
                   BoxShadow(
                     color: isDark 
-                        ? const Color(0xFFF43F5E).withAlpha(18) 
+                        ? const Color(0xFF3B82F6).withAlpha(18) 
                         : Colors.white.withAlpha(45),
                     blurRadius: 100,
                     spreadRadius: 20,
@@ -125,8 +125,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 boxShadow: [
                   BoxShadow(
                     color: isDark 
-                        ? const Color(0xFFFDA4AF).withAlpha(12) 
-                        : const Color(0xFFBE123C).withAlpha(18),
+                        ? const Color(0xFF93C5FD).withAlpha(12) 
+                        : const Color(0xFF2563EB).withAlpha(18),
                     blurRadius: 120,
                     spreadRadius: 20,
                   ),
@@ -170,7 +170,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                                 BoxShadow(
                                   color: isDark 
                                       ? Colors.black.withAlpha(120) 
-                                      : const Color(0xFF4C0519).withAlpha(35),
+                                      : const Color(0xFF1E3A8A).withAlpha(35),
                                   blurRadius: 40,
                                   offset: const Offset(0, 20),
                                 ),
@@ -188,8 +188,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                                   boxShadow: [
                                     BoxShadow(
                                       color: isDark 
-                                          ? const Color(0xFFFDA4AF).withAlpha(30) 
-                                          : const Color(0xFFBE123C).withAlpha(20),
+                                          ? const Color(0xFF93C5FD).withAlpha(30) 
+                                          : const Color(0xFF2563EB).withAlpha(20),
                                       blurRadius: 20,
                                       offset: const Offset(0, 6),
                                     ),
@@ -200,8 +200,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                                     LucideIcons.mail,
                                     size: 46,
                                     color: isDark 
-                                        ? const Color(0xFFFDA4AF) 
-                                        : const Color(0xFFC01F2F),
+                                        ? const Color(0xFF93C5FD) 
+                                        : const Color(0xFF1D4ED8),
                                   ),
                                 ),
                               ),
@@ -257,7 +257,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                             child: CircularProgressIndicator(
                               strokeWidth: 2.8,
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                isDark ? const Color(0xFFFDA4AF) : Colors.white,
+                                isDark ? const Color(0xFF93C5FD) : Colors.white,
                               ),
                             ),
                           ),
