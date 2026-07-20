@@ -807,65 +807,51 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                       ),
                     ],
                   ),
-                  const Divider(height: 28, thickness: 0.5),
-                  // Footer Actions
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          _buildCardIconButton(
-                            icon: LucideIcons.phone,
-                            onPressed: () => _showActionSnackbar('Dialing ${member.phone}...'),
-                            theme: theme,
-                            isDark: isDark,
+                  if (widget.office.type == 'Main') ...[
+                    const Divider(height: 28, thickness: 0.5),
+                    // Footer Actions
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton.icon(
+                          onPressed: () {
+                            _authenticateAction(() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ManageEntityScreen(
+                                    officeId: widget.office.id,
+                                    entityType: EntityType.staff,
+                                    staff: member,
+                                  ),
+                                ),
+                              );
+                            });
+                          },
+                          icon: const Icon(LucideIcons.pencil, size: 13),
+                          label: const Text('Edit'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
+                            textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                           ),
-                        ],
-                      ),
-                        // Admin Actions
-                        if (widget.office.type == 'Main')
-                          Row(
-                            children: [
-                              TextButton.icon(
-                                onPressed: () {
-                                  _authenticateAction(() {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ManageEntityScreen(
-                                          officeId: widget.office.id,
-                                          entityType: EntityType.staff,
-                                          staff: member,
-                                        ),
-                                      ),
-                                    );
-                                  });
-                                },
-                                icon: const Icon(LucideIcons.pencil, size: 13),
-                                label: const Text('Edit'),
-                                style: TextButton.styleFrom(
-                                  foregroundColor: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
-                                  textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              TextButton.icon(
-                                onPressed: () {
-                                  _authenticateAction(() {
-                                    _confirmDeleteStaff(member, provider);
-                                  });
-                                },
-                                icon: const Icon(LucideIcons.trash_2, size: 13),
-                                label: const Text('Delete'),
-                                style: TextButton.styleFrom(
-                                  foregroundColor: theme.colorScheme.error,
-                                  textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                                ),
-                              ),
-                            ],
-                          )
+                        ),
+                        const SizedBox(width: 4),
+                        TextButton.icon(
+                          onPressed: () {
+                            _authenticateAction(() {
+                              _confirmDeleteStaff(member, provider);
+                            });
+                          },
+                          icon: const Icon(LucideIcons.trash_2, size: 13),
+                          label: const Text('Delete'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: theme.colorScheme.error,
+                            textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                          ),
+                        ),
                       ],
-                    )
+                    ),
+                  ],
                   ],
                 ),
               ),
@@ -874,23 +860,6 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
         );
       }
 
-      Widget _buildCardIconButton({
-        required IconData icon,
-        required VoidCallback onPressed,
-        required ThemeData theme,
-        required bool isDark,
-      }) {
-        return IconButton(
-          icon: Icon(icon, size: 16),
-          onPressed: onPressed,
-          constraints: const BoxConstraints(minWidth: 38, minHeight: 38),
-          style: IconButton.styleFrom(
-            backgroundColor: isDark ? const Color(0xFF1E2640) : theme.colorScheme.primary.withAlpha(14),
-            foregroundColor: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-        );
-      }
 
       Widget _buildEquipmentTab(List<Equipment> equipment, OfficeProvider provider, ThemeData theme) {
         if (equipment.isEmpty) {
