@@ -80,8 +80,9 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
     }
   }
 
-  Future<void> _launchMap(double lat, double lng, String address) async {
-    final Uri googleMapsUri = Uri.parse('https://www.google.com/maps/search/?api=1&query=$lat,$lng');
+  Future<void> _launchMap(String name, double lat, double lng) async {
+    final String query = '$lat,$lng(${name.replaceAll(RegExp(r'[()]'), '')})';
+    final Uri googleMapsUri = Uri.parse('https://maps.google.com/?q=${Uri.encodeComponent(query)}');
     try {
       if (await canLaunchUrl(googleMapsUri)) {
         await launchUrl(googleMapsUri, mode: LaunchMode.externalApplication);
@@ -268,7 +269,7 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                                   _buildActionCircle(
                                     icon: LucideIcons.map,
                                     text: 'Map View',
-                                    onTap: () => _launchMap(office.latitude, office.longitude, office.address),
+                                    onTap: () => _launchMap(office.name, office.latitude, office.longitude),
                                   ),
                                 ],
                               ),
