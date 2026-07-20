@@ -674,7 +674,50 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
       );
     }
 
-    Widget _buildStaffTab(List<Staff> staff, OfficeProvider provider, ThemeData theme) {
+  Widget _buildDetailItem(ThemeData theme, IconData icon, String label, String value) {
+    if (value.trim().isEmpty) return const SizedBox.shrink();
+    final isDark = theme.brightness == Brightness.dark;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E2640).withAlpha(120) : theme.colorScheme.primary.withAlpha(8),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: isDark ? const Color(0xFFFDA4AF).withAlpha(15) : theme.colorScheme.primary.withAlpha(10),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 13,
+            color: isDark ? const Color(0xFFFDA4AF) : theme.colorScheme.primary,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            '$label: ',
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: (isDark ? Colors.white : Colors.black).withAlpha(150),
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              color: isDark ? Colors.white : Colors.black,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStaffTab(List<Staff> staff, OfficeProvider provider, ThemeData theme) {
       final isDark = theme.brightness == Brightness.dark;
 
       if (staff.isEmpty) {
@@ -773,34 +816,18 @@ class _DetailScreenState extends State<DetailScreen> with SingleTickerProviderSt
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 6),
-                            Text(
-                              'Appointment: ${member.appointmentDate}',
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                fontSize: 12,
-                                color: theme.textTheme.bodyMedium?.color?.withAlpha(160),
-                              ),
-                            ),
-                            Text(
-                              'Assume Office: ${member.assumeDate}',
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                fontSize: 12,
-                                color: theme.textTheme.bodyMedium?.color?.withAlpha(160),
-                              ),
-                            ),
-                            Text(
-                              'NIC: ${member.nic} • DOB: ${member.dob}',
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                fontSize: 12,
-                                color: theme.textTheme.bodyMedium?.color?.withAlpha(160),
-                              ),
-                            ),
-                            Text(
-                              'Pay Sheet No: ${member.paySheetNumber}',
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                fontSize: 12,
-                                color: theme.textTheme.bodyMedium?.color?.withAlpha(160),
-                              ),
+                            const SizedBox(height: 12),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: [
+                                _buildDetailItem(theme, LucideIcons.calendar, 'Appointed', member.appointmentDate),
+                                _buildDetailItem(theme, LucideIcons.calendar_days, 'Assumed', member.assumeDate),
+                                _buildDetailItem(theme, LucideIcons.credit_card, 'NIC', member.nic),
+                                _buildDetailItem(theme, LucideIcons.cake, 'DOB', member.dob),
+                                _buildDetailItem(theme, LucideIcons.receipt, 'Pay Sheet', member.paySheetNumber),
+                                _buildDetailItem(theme, LucideIcons.phone, 'Phone', member.phone),
+                              ],
                             ),
                           ],
                         ),
