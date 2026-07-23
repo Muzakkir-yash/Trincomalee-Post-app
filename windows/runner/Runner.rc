@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.trinco.postoffice" "\0"
-            VALUE "FileDescription", "trinco_post_office_staff_details" "\0"
+            VALUE "FileDescription", "Trincomalee Division Staff Details" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "trinco_post_office_staff_details" "\0"
+            VALUE "InternalName", "Trincomalee Division Staff Details" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.trinco.postoffice. All rights reserved." "\0"
-            VALUE "OriginalFilename", "trinco_post_office_staff_details.exe" "\0"
-            VALUE "ProductName", "trinco_post_office_staff_details" "\0"
+            VALUE "OriginalFilename", "Trincomalee Division Staff Details.exe" "\0"
+            VALUE "ProductName", "Trincomalee Division Staff Details" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

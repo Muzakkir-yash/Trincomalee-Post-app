@@ -2,38 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Brand Tones - Premium Indigo & Soft Slates
-  static const Color primaryBlue = Color(0xFF1D4ED8); // Rich professional Blue (Blue 700)
-  static const Color secondaryBlue = Color(0xFF1E3A8A); // Deep Navy Blue for deep contrast (Blue 900)
-  static const Color softBlue = Color(0xFFEFF6FF); // Blue 50 tint (super clean blue/white background)
+  // Brand Tones - Sri Lanka Postal Red & Crisp White
+  static const Color primaryRed = Color(0xFFC62828); // Sri Lanka Post Red
+  static const Color secondaryRed = Color(0xFFB71C1C); // Deep Postal Red
+  static const Color softRed = Color(0xFFFFEBEE); // Soft Red Tint for badges & highlights
   static const Color glassWhite = Color(0xCCFFFFFF); // Transparent frosted white
   
-  // Light Mode Neutrals (Modern iOS/Material Slate theme)
-  static const Color bgLight = Color(0xFFF8FAFC); // Slate 50 (cleanest light background)
+  // Light Mode Neutrals (Clean White & Modern Slate)
+  static const Color bgLight = Color(0xFFF8FAFC); // Slate 50 clean light background
   static const Color cardLight = Colors.white;
-  static const Color textDark = Color(0xFF0F172A); // Slate 900 (ultra crisp, premium readability)
+  static const Color textDark = Color(0xFF0F172A); // Slate 900 ultra readable
   static const Color textMuted = Color(0xFF64748B); // Slate 500
  
-  // Dark Mode Neutrals (Premium deep space theme)
-  static const Color bgDark = Color(0xFF060814); // Deep space black/blue base
-  static const Color cardDark = Color(0xFF0F1326); // Frosted navy card backplate
-  static const Color borderDark = Color(0xFF1E2640); // Soft navy border
-  static const Color textLight = Color(0xFFF8FAFC);
-  static const Color textLightMuted = Color(0xFF94A3B8);
- 
+  // Dark Mode Neutrals (Ultra-premium Obsidian Slate with Crimson Ruby accents)
+  static const Color bgDark = Color(0xFF060913); // Midnight Obsidian base
+  static const Color cardDark = Color(0xFF0F172A); // Slate 900 premium container
+  static const Color borderDark = Color(0xFF1E293B); // Slate 800 crisp border
+  static const Color textLight = Color(0xFFF8FAFC); // Slate 50 crisp white
+  static const Color textLightMuted = Color(0xFF94A3B8); // Slate 400 silver muted
+
   // Status Tones (Vibrant, high contrast)
   static const Color success = Color(0xFF10B981); // Emerald 500
   static const Color warning = Color(0xFFF59E0B); // Amber 500
   static const Color danger = Color(0xFFEF4444); // Red 500
- 
+
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
       scaffoldBackgroundColor: bgLight,
       colorScheme: const ColorScheme.light(
-        primary: primaryBlue,
-        secondary: secondaryBlue,
+        primary: primaryRed,
+        secondary: secondaryRed,
         surface: cardLight,
         error: danger,
       ),
@@ -66,15 +66,15 @@ class AppTheme {
         iconTheme: const IconThemeData(color: textDark),
       ),
       tabBarTheme: TabBarThemeData(
-        labelColor: primaryBlue,
+        labelColor: primaryRed,
         unselectedLabelColor: textMuted,
-        indicatorColor: primaryBlue,
+        indicatorColor: primaryRed,
         indicatorSize: TabBarIndicatorSize.tab,
         labelStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold, fontSize: 15),
         unselectedLabelStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600, fontSize: 15),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: primaryBlue,
+        backgroundColor: primaryRed,
         foregroundColor: Colors.white,
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
@@ -93,7 +93,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(color: primaryBlue, width: 1.8),
+          borderSide: const BorderSide(color: primaryRed, width: 1.8),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
@@ -104,16 +104,17 @@ class AppTheme {
       ),
     );
   }
- 
+
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: bgDark,
       colorScheme: const ColorScheme.dark(
-        primary: Color(0xFF93C5FD), // Soft sky blue to prevent screen glare (Blue 300)
-        secondary: Color(0xFF3B82F6), // Accent Blue 500
+        primary: Color(0xFFF87171), // Vibrant Crimson Accent
+        secondary: Color(0xFFFB7185), // Vibrant Rose Accent
         surface: cardDark,
+        surfaceContainerHighest: Color(0xFF1E293B),
         error: danger,
       ),
       textTheme: GoogleFonts.plusJakartaSansTextTheme(ThemeData.dark().textTheme).copyWith(
@@ -145,17 +146,17 @@ class AppTheme {
         iconTheme: const IconThemeData(color: textLight),
       ),
       tabBarTheme: TabBarThemeData(
-        labelColor: const Color(0xFF93C5FD),
+        labelColor: const Color(0xFFF87171),
         unselectedLabelColor: textLightMuted,
-        indicatorColor: const Color(0xFF93C5FD),
+        indicatorColor: const Color(0xFFF87171),
         indicatorSize: TabBarIndicatorSize.tab,
         labelStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold, fontSize: 15),
         unselectedLabelStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600, fontSize: 15),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: const Color(0xFF2563EB), // Blue 600
+        backgroundColor: const Color(0xFFDC2626), // Postal Crimson Red
         foregroundColor: Colors.white,
-        elevation: 4,
+        elevation: 6,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -172,14 +173,14 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
-          borderSide: const BorderSide(color: Color(0xFF93C5FD), width: 1.8),
+          borderSide: const BorderSide(color: Color(0xFFF87171), width: 1.8),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: const BorderSide(color: danger, width: 1.2),
         ),
         labelStyle: GoogleFonts.plusJakartaSans(color: textLightMuted, fontWeight: FontWeight.w500),
-        hintStyle: GoogleFonts.plusJakartaSans(color: textLightMuted.withAlpha(100)),
+        hintStyle: GoogleFonts.plusJakartaSans(color: textLightMuted.withAlpha(120)),
       ),
     );
   }

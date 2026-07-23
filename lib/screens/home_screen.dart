@@ -6,6 +6,7 @@ import '../providers/theme_provider.dart';
 import '../models/post_office.dart';
 import '../theme/app_theme.dart';
 import 'detail_screen.dart';
+import 'excel_table_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -38,92 +39,134 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: SafeArea(
           bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Premium Custom Header / AppBar
-              _buildAppBar(theme, themeProvider, isDark),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final double screenWidth = constraints.maxWidth;
+              final bool isDesktop = screenWidth >= 1100;
+              final bool isTablet = screenWidth >= 700 && screenWidth < 1100;
+              final int gridColumns = isDesktop ? 3 : (isTablet ? 2 : 1);
 
-              // Scrollable content area
-              Expanded(
-                child: CustomScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  slivers: [
-                    // Stats Dashboard section (Glassmorphic)
-                    SliverToBoxAdapter(
-                      child: _buildStatsDashboard(officeProvider, theme, isDark),
-                    ),
+              return Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 1400),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Premium Custom Header / AppBar
+                      _buildAppBar(theme, themeProvider, isDark, isDesktop),
 
-                    // Search and Filter section
-                    SliverToBoxAdapter(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Directory Lookup',
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                      // Scrollable content area
+                      Expanded(
+                        child: CustomScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          slivers: [
+                            // Stats Dashboard section (Glassmorphic)
+                            SliverToBoxAdapter(
+                              child: _buildStatsDashboard(officeProvider, theme, isDark, isDesktop),
                             ),
-                            const SizedBox(height: 10),
-                            TextField(
-                              controller: _searchController,
-                              onChanged: (val) => officeProvider.updateSearchQuery(val),
-                              style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15),
-                              decoration: InputDecoration(
-                                hintText: 'Search office name, postal code, region...',
-                                prefixIcon: Icon(
-                                  LucideIcons.search,
-                                  color: isDark ? const Color(0xFF93C5FD) : theme.colorScheme.primary,
-                                  size: 20,
+
+                            // Search and Filter section
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Directory Lookup',
+                                          style: theme.textTheme.titleMedium?.copyWith(
+                                            fontSize: isDesktop ? 22 : 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          '${officeProvider.filteredPostOffices.length} offices found',
+                                          style: theme.textTheme.bodyMedium?.copyWith(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600,
+                                            color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    TextField(
+                                      controller: _searchController,
+                                      onChanged: (val) => officeProvider.updateSearchQuery(val),
+                                      style: theme.textTheme.bodyLarge?.copyWith(fontSize: 15),
+                                      decoration: InputDecoration(
+                                        hintText: 'Search office name, postal code, region...',
+                                        prefixIcon: Icon(
+                                          LucideIcons.search,
+                                          color: isDark ? const Color(0xFFEF5350) : theme.colorScheme.primary,
+                                          size: 20,
+                                        ),
+                                        suffixIcon: _searchController.text.isNotEmpty
+                                            ? IconButton(
+                                                icon: const Icon(LucideIcons.x, size: 16),
+                                                onPressed: () {
+                                                  _searchController.clear();
+                                                  officeProvider.updateSearchQuery('');
+                                                },
+                                              )
+                                            : null,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    _buildCategoryFilters(officeProvider, theme, isDark),
+                                  ],
                                 ),
-                                suffixIcon: _searchController.text.isNotEmpty
-                                    ? IconButton(
-                                        icon: const Icon(LucideIcons.x, size: 16),
-                                        onPressed: () {
-                                          _searchController.clear();
-                                          officeProvider.updateSearchQuery('');
-                                        },
-                                      )
-                                    : null,
                               ),
                             ),
-                            const SizedBox(height: 12),
-                            _buildCategoryFilters(officeProvider, theme, isDark),
+                            // List / Grid of Post Offices
+                            SliverPadding(
+                              padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+                              sliver: officeProvider.filteredPostOffices.isEmpty
+                                  ? SliverToBoxAdapter(child: _buildEmptyState(theme))
+                                  : (gridColumns > 1
+                                      ? SliverGrid(
+                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: gridColumns,
+                                            mainAxisSpacing: 16,
+                                            crossAxisSpacing: 16,
+                                            mainAxisExtent: 220,
+                                          ),
+                                          delegate: SliverChildBuilderDelegate(
+                                            (context, index) {
+                                              final office = officeProvider.filteredPostOffices[index];
+                                              return _buildOfficeCard(context, office, officeProvider, theme, isDark, index);
+                                            },
+                                            childCount: officeProvider.filteredPostOffices.length,
+                                          ),
+                                        )
+                                      : SliverList(
+                                          delegate: SliverChildBuilderDelegate(
+                                            (context, index) {
+                                              final office = officeProvider.filteredPostOffices[index];
+                                              return _buildOfficeCard(context, office, officeProvider, theme, isDark, index);
+                                            },
+                                            childCount: officeProvider.filteredPostOffices.length,
+                                          ),
+                                        )),
+                            ),
                           ],
                         ),
                       ),
-                    ),
-
-                    // List of Post Offices
-                    SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
-                      sliver: officeProvider.filteredPostOffices.isEmpty
-                          ? SliverToBoxAdapter(child: _buildEmptyState(theme))
-                          : SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                (context, index) {
-                                  final office = officeProvider.filteredPostOffices[index];
-                                  return _buildOfficeCard(context, office, officeProvider, theme, isDark, index);
-                                },
-                                childCount: officeProvider.filteredPostOffices.length,
-                              ),
-                            ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),
     );
   }
 
-  Widget _buildAppBar(ThemeData theme, ThemeProvider themeProvider, bool isDark) {
+  Widget _buildAppBar(ThemeData theme, ThemeProvider themeProvider, bool isDark, bool isDesktop) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
@@ -140,29 +183,28 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Row(
             children: [
-              // Professional Logo Emblem
+              // Official App Logo Emblem
               Container(
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: isDark
-                        ? [const Color(0xFF3B82F6).withAlpha(40), const Color(0xFF1D4ED8).withAlpha(10)]
-                        : [const Color(0xFF1D4ED8).withAlpha(20), const Color(0xFF1D4ED8).withAlpha(5)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  color: isDark ? const Color(0xFF151C2C) : Colors.white,
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: isDark ? const Color(0xFF93C5FD).withAlpha(40) : const Color(0xFF1D4ED8).withAlpha(30),
-                    width: 1.5,
-                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: isDark 
+                          ? const Color(0xFFEF5350).withAlpha(15) 
+                          : theme.colorScheme.primary.withAlpha(15),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
                 ),
-                child: Center(
-                  child: Icon(
-                    LucideIcons.landmark,
-                    size: 20,
-                    color: isDark ? const Color(0xFF93C5FD) : const Color(0xFF1D4ED8),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    'assets/icon/app_icon.png',
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -176,7 +218,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontSize: 10,
                       letterSpacing: 1.8,
                       fontWeight: FontWeight.w800,
-                      color: isDark ? const Color(0xFF93C5FD) : const Color(0xFF1D4ED8),
+                      color: isDark ? const Color(0xFFEF5350) : theme.colorScheme.primary,
                     ),
                   ),
                   const SizedBox(height: 3),
@@ -197,10 +239,6 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: isDark ? const Color(0xFF1E2640) : const Color(0xFFE2E8F0),
-                width: 1.2,
-              ),
             ),
             child: IconButton(
               icon: Icon(
@@ -223,92 +261,89 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildStatsDashboard(OfficeProvider provider, ThemeData theme, bool isDark) {
+  Widget _buildStatsDashboard(OfficeProvider provider, ThemeData theme, bool isDark, bool isDesktop) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-      height: 140,
-      child: ClipRRect(
+      margin: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        child: Stack(
+        gradient: LinearGradient(
+          colors: isDark
+              ? [const Color(0xFF991B1B), const Color(0xFF450A0A), const Color(0xFF0F0404)]
+              : [const Color(0xFFC62828), const Color(0xFFB71C1C)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        border: Border.all(
+          color: isDark ? const Color(0xFFF87171).withAlpha(40) : Colors.transparent,
+          width: 1.2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark ? const Color(0xFFDC2626).withAlpha(30) : const Color(0xFFC62828).withAlpha(40),
+            blurRadius: 18,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            // Premium Gradient Backplate
+            _buildStatItem(
+              icon: LucideIcons.building,
+              value: provider.totalPostOffices.toString(),
+              label: 'Offices',
+              color: isDark ? const Color(0xFFF87171) : Colors.white,
+              theme: theme,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ExcelTableScreen(tableType: ExcelTableType.offices),
+                  ),
+                );
+              },
+            ),
             Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: isDark
-                      ? [const Color(0xFF0F1326), const Color(0xFF060814)]
-                      : [theme.colorScheme.primary, const Color(0xFF1D4ED8)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
+              height: 38,
+              width: 1,
+              color: Colors.white.withAlpha(45),
             ),
-            // Background Ambient Glowing Circle 1
-            Positioned(
-              top: -60,
-              left: -60,
-              child: Container(
-                width: 160,
-                height: 160,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: (isDark ? const Color(0xFF93C5FD) : Colors.white).withAlpha(isDark ? 12 : 30),
-                ),
-              ),
+            _buildStatItem(
+              icon: LucideIcons.users,
+              value: provider.totalStaffCount.toString(),
+              label: 'Staff Registry',
+              color: isDark ? const Color(0xFFF87171) : Colors.white,
+              theme: theme,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ExcelTableScreen(tableType: ExcelTableType.staff),
+                  ),
+                );
+              },
             ),
-            // Background Ambient Glowing Circle 2
-            Positioned(
-              bottom: -40,
-              right: 60,
-              child: Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: (isDark ? const Color(0xFF93C5FD) : Colors.white).withAlpha(isDark ? 8 : 18),
-                ),
-              ),
+            Container(
+              height: 38,
+              width: 1,
+              color: Colors.white.withAlpha(45),
             ),
-
-            // Dashboard Stats Details
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildStatItem(
-                    icon: LucideIcons.building,
-                    value: provider.totalPostOffices.toString(),
-                    label: 'Offices',
-                    color: isDark ? const Color(0xFF93C5FD) : Colors.white,
-                    theme: theme,
+            _buildStatItem(
+              icon: LucideIcons.package_check,
+              value: provider.totalEquipmentCount.toString(),
+              label: 'Inventory',
+              color: isDark ? const Color(0xFFF87171) : Colors.white,
+              theme: theme,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ExcelTableScreen(tableType: ExcelTableType.inventory),
                   ),
-                  Container(
-                    height: 44,
-                    width: 1,
-                    color: Colors.white.withAlpha(45),
-                  ),
-                  _buildStatItem(
-                    icon: LucideIcons.users,
-                    value: provider.totalStaffCount.toString(),
-                    label: 'Staff Registry',
-                    color: isDark ? const Color(0xFF93C5FD) : Colors.white,
-                    theme: theme,
-                  ),
-                  Container(
-                    height: 44,
-                    width: 1,
-                    color: Colors.white.withAlpha(45),
-                  ),
-                  _buildStatItem(
-                    icon: LucideIcons.package_check,
-                    value: provider.totalEquipmentCount.toString(),
-                    label: 'Inventory',
-                    color: isDark ? const Color(0xFF93C5FD) : Colors.white,
-                    theme: theme,
-                  ),
-                ],
-              ),
+                );
+              },
             ),
           ],
         ),
@@ -322,36 +357,46 @@ class _HomeScreenState extends State<HomeScreen> {
     required String label,
     required Color color,
     required ThemeData theme,
+    required VoidCallback onTap,
   }) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white.withAlpha(20),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, color: color, size: 20),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(7),
+              decoration: BoxDecoration(
+                color: Colors.white.withAlpha(20),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: color, size: 18),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                fontSize: 18,
+              ),
+            ),
+            const SizedBox(height: 1),
+            Text(
+              label,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: Colors.white.withAlpha(210),
+                fontWeight: FontWeight.w600,
+                fontSize: 11,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 8),
-        Text(
-          value,
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            fontSize: 20,
-          ),
-        ),
-        const SizedBox(height: 1),
-        Text(
-          label,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: Colors.white.withAlpha(180),
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -377,7 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   provider.updateTypeFilter(filter);
                 }
               },
-              selectedColor: isDark ? const Color(0xFF3B82F6) : theme.colorScheme.primary,
+              selectedColor: isDark ? const Color(0xFFDC2626) : theme.colorScheme.primary,
               checkmarkColor: Colors.white,
               labelStyle: theme.textTheme.bodyMedium?.copyWith(
                 color: isSelected 
@@ -391,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
               side: BorderSide(
                 color: isSelected
                     ? Colors.transparent
-                    : (isDark ? const Color(0xFF1E2640) : const Color(0xFFE2E8F0)),
+                    : (isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0)),
                 width: 1.2,
               ),
             ),
@@ -429,9 +474,15 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           color: theme.cardTheme.color,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: isDark ? const Color(0xFF1E2640) : const Color(0xFFE2E8F0), width: 1.2),
+          border: Border.all(color: isDark ? const Color(0xFF1E293B) : const Color(0xFFE2E8F0), width: 1.2),
           boxShadow: isDark
-              ? []
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFF38BDF8).withAlpha(8),
+                    blurRadius: 16,
+                    offset: const Offset(0, 4),
+                  )
+                ]
               : [
                   BoxShadow(
                     color: Colors.black.withAlpha(4),
@@ -462,13 +513,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 58,
                     decoration: BoxDecoration(
                       color: isMain
-                          ? theme.colorScheme.primary.withAlpha(16)
-                          : (isDark ? const Color(0xFF93C5FD).withAlpha(16) : const Color(0xFF1E3A8A).withAlpha(16)),
+                          ? (isDark ? const Color(0xFF0284C7).withAlpha(30) : theme.colorScheme.primary.withAlpha(16))
+                          : (isDark ? const Color(0xFFD97706).withAlpha(30) : const Color(0xFFC62828).withAlpha(12)),
                       borderRadius: BorderRadius.circular(18),
                       border: Border.all(
                         color: isMain 
-                            ? theme.colorScheme.primary.withAlpha(40) 
-                            : (isDark ? const Color(0xFF93C5FD).withAlpha(40) : const Color(0xFF1E3A8A).withAlpha(40)),
+                            ? (isDark ? const Color(0xFF38BDF8).withAlpha(60) : theme.colorScheme.primary.withAlpha(40)) 
+                            : (isDark ? const Color(0xFFFBBF24).withAlpha(60) : const Color(0xFFC62828).withAlpha(30)),
                         width: 1.5,
                       ),
                     ),
@@ -476,8 +527,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Icon(
                         isMain ? LucideIcons.building : LucideIcons.store,
                         color: isMain 
-                            ? theme.colorScheme.primary 
-                            : (isDark ? const Color(0xFF93C5FD) : const Color(0xFF1D4ED8)),
+                            ? (isDark ? const Color(0xFF38BDF8) : theme.colorScheme.primary) 
+                            : (isDark ? const Color(0xFFFBBF24) : const Color(0xFFC62828)),
                         size: 24,
                       ),
                     ),
@@ -508,8 +559,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                               decoration: BoxDecoration(
                                 color: isMain
-                                    ? theme.colorScheme.primary.withAlpha(16)
-                                    : (isDark ? const Color(0xFF93C5FD).withAlpha(16) : const Color(0xFF1E3A8A).withAlpha(16)),
+                                    ? (isDark ? const Color(0xFF0284C7).withAlpha(40) : theme.colorScheme.primary.withAlpha(16))
+                                    : (isDark ? const Color(0xFFD97706).withAlpha(40) : const Color(0xFFC62828).withAlpha(12)),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
@@ -519,8 +570,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   fontSize: 9,
                                   letterSpacing: 0.5,
                                   color: isMain 
-                                      ? theme.colorScheme.primary 
-                                      : (isDark ? const Color(0xFF93C5FD) : const Color(0xFF1D4ED8)),
+                                      ? (isDark ? const Color(0xFF38BDF8) : theme.colorScheme.primary) 
+                                      : (isDark ? const Color(0xFFFBBF24) : const Color(0xFFC62828)),
                                 ),
                               ),
                             ),

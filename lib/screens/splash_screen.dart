@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'home_screen.dart';
 
@@ -63,30 +62,21 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
     return Scaffold(
       body: Stack(
         children: [
-          // Background Gradient with rich, warm ambient lighting
+          // Background Gradient - Rich Dark Blue Ambient Lighting
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: isDark
-                    ? [
-                        const Color(0xFF04060C),
-                        const Color(0xFF0C1020),
-                        const Color(0xFF151930),
-                      ]
-                    : [
-                        const Color(0xFF1E3A8A), // Deep Navy Blue
-                        const Color(0xFF2563EB), // Strong Royal Blue
-                        const Color(0xFFF8FAFC), // Off-white Slate
-                      ],
-                stops: isDark ? const [0.0, 0.65, 1.0] : const [0.0, 0.5, 1.0],
+                colors: [
+                  Color(0xFF060914), // Deep Space Dark Blue
+                  Color(0xFF0F172A), // Slate Navy Dark Blue
+                  Color(0xFF1E293B), // Deep Blue Slate
+                ],
+                stops: [0.0, 0.55, 1.0],
               ),
             ),
           ),
@@ -102,9 +92,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: isDark 
-                        ? const Color(0xFF3B82F6).withAlpha(18) 
-                        : Colors.white.withAlpha(45),
+                    color: const Color(0xFF3B82F6).withAlpha(35), 
                     blurRadius: 100,
                     spreadRadius: 20,
                   ),
@@ -124,9 +112,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: isDark 
-                        ? const Color(0xFF93C5FD).withAlpha(12) 
-                        : const Color(0xFF2563EB).withAlpha(18),
+                    color: const Color(0xFF1D4ED8).withAlpha(25), 
                     blurRadius: 120,
                     spreadRadius: 20,
                   ),
@@ -148,29 +134,27 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Glassmorphic Outer Container
+                          // Glassmorphic Outer Container with Official App Logo
                           Container(
                             width: 148,
                             height: 148,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Colors.white.withAlpha(isDark ? 20 : 70),
+                                color: Colors.white.withAlpha(40),
                                 width: 1.8,
                               ),
                               gradient: LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
-                                  Colors.white.withAlpha(isDark ? 15 : 55),
-                                  Colors.white.withAlpha(isDark ? 5 : 15),
+                                  Colors.white.withAlpha(35),
+                                  Colors.white.withAlpha(10),
                                 ],
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: isDark 
-                                      ? Colors.black.withAlpha(120) 
-                                      : const Color(0xFF1E3A8A).withAlpha(35),
+                                  color: Colors.black.withAlpha(140), 
                                   blurRadius: 40,
                                   offset: const Offset(0, 20),
                                 ),
@@ -181,27 +165,22 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                                 width: 94,
                                 height: 94,
                                 decoration: BoxDecoration(
-                                  color: isDark 
-                                      ? const Color(0xFF0F1326) 
-                                      : Colors.white,
+                                  color: Colors.white,
                                   shape: BoxShape.circle,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: isDark 
-                                          ? const Color(0xFF93C5FD).withAlpha(30) 
-                                          : const Color(0xFF2563EB).withAlpha(20),
+                                      color: const Color(0xFF3B82F6).withAlpha(30), 
                                       blurRadius: 20,
                                       offset: const Offset(0, 6),
                                     ),
                                   ],
                                 ),
-                                child: Center(
-                                  child: Icon(
-                                    LucideIcons.mail,
-                                    size: 46,
-                                    color: isDark 
-                                        ? const Color(0xFF93C5FD) 
-                                        : const Color(0xFF1D4ED8),
+                                child: ClipOval(
+                                  child: Image.asset(
+                                    'assets/icon/app_icon.png',
+                                    width: 94,
+                                    height: 94,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
@@ -216,7 +195,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                               letterSpacing: 7.0,
-                              color: isDark ? const Color(0xFF94A3B8) : Colors.white.withAlpha(210),
+                              color: const Color(0xFF94A3B8),
                             ),
                           ),
                           const SizedBox(height: 14),
@@ -230,7 +209,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                               letterSpacing: -1.2,
                               shadows: [
                                 BoxShadow(
-                                  color: Colors.black.withAlpha(60),
+                                  color: Colors.black.withAlpha(80),
                                   blurRadius: 12,
                                   offset: const Offset(0, 5),
                                 ),
@@ -243,7 +222,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                             'Administrative Registry & Asset Portal',
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 16,
-                              color: isDark ? const Color(0xFF94A3B8) : Colors.white.withAlpha(220),
+                              color: const Color(0xFF94A3B8),
                               fontWeight: FontWeight.w400,
                               letterSpacing: 0.2,
                             ),
@@ -251,13 +230,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                           const SizedBox(height: 80),
 
                           // Loading Indicator
-                          SizedBox(
+                          const SizedBox(
                             width: 26,
                             height: 26,
                             child: CircularProgressIndicator(
                               strokeWidth: 2.8,
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                isDark ? const Color(0xFF93C5FD) : Colors.white,
+                                Colors.white,
                               ),
                             ),
                           ),

@@ -30,7 +30,7 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
 
   // Staff Form controllers & selections
   final _staffNameController = TextEditingController();
-  String _selectedDesignation = 'Counter Officer';
+  String _selectedDesignation = 'PSO-1';
   final _staffPhoneController = TextEditingController();
   final _staffNicController = TextEditingController();
   final _staffPaySheetController = TextEditingController();
@@ -45,14 +45,15 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
   String _selectedStatus = 'Working';
 
   final List<String> _designations = [
-    'Postmaster',
-    'Assistant Postmaster',
-    'Sub-Postmaster',
-    'Senior Mail Sorter',
-    'Counter Officer',
-    'Delivery Postman',
-    'Clerk',
-    'Security Officer',
+    'PSO-1',
+    'PSO-2',
+    'PSO-3',
+    'PA-1',
+    'PA-2',
+    'PA-3',
+    'Sub -Pm',
+    'Reg-Sub',
+    'C-Sub',
   ];
 
   final List<String> _categories = [
@@ -90,6 +91,16 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
         _staffDobController.text = s.dob;
         if (_designations.contains(s.designation)) {
           _selectedDesignation = s.designation;
+        } else {
+          // Map legacy designations cleanly to allowed list
+          final lower = s.designation.toLowerCase();
+          if (lower.contains('sub')) {
+            _selectedDesignation = 'Sub -Pm';
+          } else if (lower.contains('assistant') || lower.contains('pa')) {
+            _selectedDesignation = 'PA-1';
+          } else {
+            _selectedDesignation = 'PSO-1';
+          }
         }
       } else {
         _staffAppointmentDateController.text = DateTime.now().toString().split(' ')[0];
@@ -140,12 +151,12 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
           data: Theme.of(context).copyWith(
             colorScheme: isDark
                 ? const ColorScheme.dark(
-                    primary: Color(0xFF93C5FD),
-                    onPrimary: Colors.black,
+                    primary: Color(0xFFEF5350),
+                    onPrimary: Colors.white,
                     surface: Color(0xFF1E293B),
                   )
                 : const ColorScheme.light(
-                    primary: Color(0xFF1D4ED8),
+                    primary: Color(0xFFC62828),
                     onPrimary: Colors.white,
                     surface: Colors.white,
                   ),
@@ -262,9 +273,12 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 800),
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: Form(
             key: _formKey,
             child: Column(
@@ -307,8 +321,8 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: isDark
-                            ? [const Color(0xFF3B82F6), const Color(0xFF1D4ED8)]
-                            : [theme.colorScheme.primary, const Color(0xFF1E3A8A)],
+                            ? [const Color(0xFFD32F2F), const Color(0xFFB71C1C)]
+                            : [theme.colorScheme.primary, const Color(0xFFB71C1C)],
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       ),
@@ -340,8 +354,10 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  ),
+);
+}
 
   Widget _buildStaffForm(ThemeData theme, bool isDark) {
     return Column(
@@ -351,7 +367,7 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
           children: [
             Icon(
               LucideIcons.user, 
-              color: isDark ? const Color(0xFF93C5FD) : theme.colorScheme.primary, 
+              color: isDark ? const Color(0xFFEF5350) : theme.colorScheme.primary, 
               size: 20,
             ),
             const SizedBox(width: 8),
@@ -524,7 +540,7 @@ class _ManageEntityScreenState extends State<ManageEntityScreen> {
           children: [
             Icon(
               LucideIcons.package, 
-              color: isDark ? const Color(0xFF93C5FD) : theme.colorScheme.primary, 
+              color: isDark ? const Color(0xFFEF5350) : theme.colorScheme.primary, 
               size: 20,
             ),
             const SizedBox(width: 8),
